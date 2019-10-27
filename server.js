@@ -126,6 +126,14 @@ app.post("/articles/:id", function (req, res) {
   });
 });
 
+app.get("/comments", function (req, res) {
+
+  // TODO: Finish the route so it grabs all of the articles
+  db.Comment.find({}).then(function (dbComment) {
+    console.log(dbComment)
+    res.json(dbComment);
+  });
+});
 
 // Start the server
 app.listen(PORT, function () {
