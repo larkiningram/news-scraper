@@ -119,15 +119,13 @@ app.post("/articles/:id", function (req, res) {
       console.log(result);
     }
   });
-
-  // db.Comment.create(comment).then(function(dbComment) {
-  //   res.json(dbComment);
-  // });
-
-  db.Article.update({ id: req.params.id }, {$set: {_id: comment._id}}).then(function (dbArticle) {
+  
+  // console.log(comment._id);
+  db.Article.update({ id: req.params._id }, {$set: {comment: comment._id}}).then(function (dbArticle) {
     res.json(dbArticle)
   });
 });
+
 
 // Start the server
 app.listen(PORT, function () {
