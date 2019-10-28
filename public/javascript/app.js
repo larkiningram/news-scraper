@@ -13,7 +13,7 @@ $(document).on("click", "p", function() {
   $("#notes").empty();
   // Save the id from the p tag
   var thisId = $(this).attr("data-id");
-
+  // console.log(data);
   // Now make an ajax call for the Article
   $.ajax({
     method: "GET",
@@ -21,9 +21,9 @@ $(document).on("click", "p", function() {
   })
     // With that done, add the note information to the page
     .then(function(data) {
-      console.log(data);
+      // console.log(data[0].title);
       // The title of the article
-      $("#notes").append("<h2>" + data.title + "</h2>");
+      $("#notes").append("<h2>" + data[0].title + "</h2>");
       // An input to enter a new title
       $("#notes").append("<input id='titleinput' name='title' >");
       // A textarea to add a new note body
@@ -45,7 +45,7 @@ $(document).on("click", "p", function() {
 $(document).on("click", "#savenote", function() {
   // Grab the id associated with the article from the submit button
   var thisId = $(this).attr("data-id");
-  console.log(thisId)
+  // console.log(thisId)
 
 
   // Run a POST request to change the note, using what's entered in the inputs
