@@ -10,7 +10,7 @@ body { background-color: slategray }
   overflow: auto;
   width: 60%;
   height: 700px;
-  background-color: white;
+  /* background-color: white; */
 }
 #notes {
   float: right;

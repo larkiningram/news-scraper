@@ -1,7 +1,7 @@
 var express = require("express");
 var logger = require("morgan");
 var mongoose = require("mongoose");
-// var mongojs = require("mongojs");
+var mongojs = require("mongojs");
 
 // Our scraping tools
 // Axios is a promised-based http library, similar to jQuery's Ajax method
@@ -114,14 +114,18 @@ app.post("/articles/:id", function (req, res) {
     } else {
       console.log(result);
     }
-  });
+  })
+  .catch(function (err) {
+    // If an error occurred, log it
+    console.log(err);
+  });;
 
-  // console.log(comment._id);
-  console.log(comment)
+  console.log(mongojs.ObjectId(req.params.id))
 
-  db.Article.update(
+
+  db.Article.updateOne(
     {
-      id: req.params._id
+      _id: mongojs.ObjectId(req.params.id)
     },
     {
       $push: {
@@ -130,6 +134,10 @@ app.post("/articles/:id", function (req, res) {
     }).then(function(result) {
       res.json(result)
     })
+    .catch(function (err) {
+      // If an error occurred, log it
+      console.log(err);
+    });
     // ,
     // function (error, edited) {
     //   // Log any errors from mongojs
