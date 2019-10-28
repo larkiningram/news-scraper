@@ -29,11 +29,11 @@ app.use(express.json());
 // Make public a static folder
 app.use(express.static("public"));
 
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+// var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
 
-mongoose.connect(MONGODB_URI);
+// mongoose.connect(MONGODB_URI);
 // Connect to the Mongo DB
-// mongoose.connect("mongodb://localhost/unit18Populater", { useNewUrlParser: true });
+mongoose.connect("mongodb://localhost/unit18Populater", { useNewUrlParser: true });
 
 // Routes
 
@@ -73,7 +73,7 @@ app.get("/scrape", function (req, res) {
     });
 
     // Send a message to the client
-    res.send("Scrape Complete");
+    res.send("Scrape Complete! Go back home to see articles");
   });
 });
 
@@ -141,20 +141,6 @@ app.post("/articles/:id", function (req, res) {
       // If an error occurred, log it
       console.log(err);
     });
-    // ,
-    // function (error, edited) {
-    //   // Log any errors from mongojs
-    //   if (error) {
-    //     console.log(error);
-    //     res.send(error);
-    //   }
-    //   else {
-    //     // Otherwise, send the mongojs response to the browser
-    //     // This will fire off the success function of the ajax request
-    //     console.log(edited);
-    //     res.json(edited);
-    //   }
-    // })
 });
 
 // Route for grabbing a specific Article by id, populate it with it's comments
