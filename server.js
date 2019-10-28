@@ -1,6 +1,7 @@
 var express = require("express");
 var logger = require("morgan");
 var mongoose = require("mongoose");
+// var mongojs = require("mongojs");
 
 // Our scraping tools
 // Axios is a promised-based http library, similar to jQuery's Ajax method
@@ -33,7 +34,7 @@ mongoose.connect("mongodb://localhost/unit18Populater", { useNewUrlParser: true 
 
 // Routes
 
-app.get("/", function(req, res) {
+app.get("/", function (req, res) {
   res.send(index.html);
 });
 // A GET route for scraping the echoJS website
@@ -76,10 +77,22 @@ app.get("/scrape", function (req, res) {
 // Route for getting all Articles from the db
 app.get("/articles", function (req, res) {
 
-  // TODO: Finish the route so it grabs all of the articles
-  db.Article.find({}).then(function (dbArticle) {
-    // console.log(dbArticle)
-    res.json(dbArticle);
+  // // TODO: Finish the route so it grabs all of the articles
+  // db.Article.find({}).then(function (dbArticle) {
+  //   // console.log(dbArticle)
+  //   res.json(dbArticle);
+  // });
+  // Find all notes in the notes collection
+  db.Article.find({}, function (error, found) {
+    // Log any errors
+    if (error) {
+      console.log(error);
+    }
+    else {
+      // Otherwise, send json of the notes back to user
+      // This will fire off the success function of the ajax request
+      res.json(found);
+    }
   });
 });
 
@@ -87,7 +100,7 @@ app.get("/articles", function (req, res) {
 app.post("/articles/:id", function (req, res) {
   // TODO
   // ====
-  // save the new comments that gets posted to the commentss collection
+  // save the new comments that gets posted to the comments collection
   // then find an article from the req.params.id
   // and update it's "comments" property with the _id of the new comments
   var comment = new Comment({
@@ -95,20 +108,42 @@ app.post("/articles/:id", function (req, res) {
     body: req.body.body
   });
 
-  comment.save().then(function(err, result) {
+  comment.save().then(function (err, result) {
     if (err) {
       throw err
     } else {
-      // console.log(result);
+      console.log(result);
     }
   });
-  
-  // console.log(comment._id);
-  // console.log(req.params.id)
 
-  db.Article.update({ _id: req.params.id }, {$set: {comment: comment._id}}).then(function (dbArticle) {
-    res.json(dbArticle)
-  });
+  // console.log(comment._id);
+  console.log(comment)
+
+  db.Article.update(
+    {
+      id: req.params._id
+    },
+    {
+      $push: {
+        comment: comment._id
+      }
+    }).then(function(result) {
+      res.json(result)
+    })
+    // ,
+    // function (error, edited) {
+    //   // Log any errors from mongojs
+    //   if (error) {
+    //     console.log(error);
+    //     res.send(error);
+    //   }
+    //   else {
+    //     // Otherwise, send the mongojs response to the browser
+    //     // This will fire off the success function of the ajax request
+    //     console.log(edited);
+    //     res.json(edited);
+    //   }
+    // })
 });
 
 // Route for grabbing a specific Article by id, populate it with it's comments
@@ -119,22 +154,35 @@ app.get("/articles/:id", function (req, res) {
   // and run the populate method with "comments",
   // then responds with the article with the comments included
 
-  // db.Article.find({}).then(function(result) {
-  //   res.json(result);
-  // })
-  // console.log(req.params.id)
-  db.Article.find({ _id: req.params.id }).populate("comment").then(function (dbArticle) {
-    res.json(dbArticle)
-  });
+  console.log(req.params.id)
+  db.Article.find(
+    {
+      _id: req.params.id
+    })
+    .populate("comment").then(function (dbArticle) {
+      res.json(dbArticle)
+    });
 
 });
 
 app.get("/comments", function (req, res) {
 
-  // TODO: Finish the route so it grabs all of the comments
-  db.Comment.find({}).then(function (dbComment) {
-    // console.log(dbComment)
-    res.json(dbComment);
+  // // TODO: Finish the route so it grabs all of the comments
+  // db.Comment.find({}).then(function (dbComment) {
+  //   // console.log(dbComment)
+  //   res.json(dbComment);
+  // });
+
+  db.Comment.find({}, function (error, found) {
+    // Log any errors
+    if (error) {
+      console.log(error);
+    }
+    else {
+      // Otherwise, send json of the notes back to user
+      // This will fire off the success function of the ajax request
+      res.json(found);
+    }
   });
 });
 
