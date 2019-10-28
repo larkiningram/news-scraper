@@ -1,4 +1,7 @@
-body { background-color: slategray }
+body { 
+  background-color: black;
+  color: white;
+}
 #wrapper {
   width: 960px;
   margin-left: auto;
